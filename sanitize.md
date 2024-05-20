@@ -6,6 +6,9 @@
 const imgSrc = "https://feederbox.cc/pub/transparent.png"
 document.querySelectorAll(".scene-card img").forEach(img => img.src=imgSrc)
 
+// replace scene images with blurred
+document.querySelectorAll(".scene-card img.scene-card-preview-image").forEach(img => img.style.filter='blur(10px)')
+
 // replace all titles with Lorem Ipsum
 const lipsum = "Lorem Ipsum"
 document.querySelectorAll(".card-section-title>div").forEach(title => title.textContent = lipsum)
