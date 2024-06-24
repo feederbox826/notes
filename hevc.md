@@ -5,7 +5,7 @@ You can test HEVC support [on this site](https://tools.woolyss.com/html5-audio-v
 
 # Windows
 Make sure you have the [HEVC Video Extensions](https://apps.microsoft.com/detail/9n4wgh0z6vhq)  
-~~You can also [pay $1 for them](https://apps.microsoft.com/detail/9nmzlz57r3t7)~~  
+~~You can also [pay $1 for them](https://apps.microsoft.com/detail/9nmzlz57r3t7)~~ or grab it from a [mirror](hevc-extensions.md)
 
 ## Windows/ Firefox
 - Install the aforementioned `HEVC Video Extensions`

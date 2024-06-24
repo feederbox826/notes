@@ -2,9 +2,9 @@
 This guide assumes knowledge of various topics. Sorry.
 
 ## git identity splitting
-[Generate a new identity](https://docs.github.com/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+[Generate a new SSH identity](https://docs.github.com/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
 
-Now assuming your new identity, `iodine-swizzle`
+Now assuming your new identity, `iodine-swizzle` [or generate your own with a passphrase](https://bitwarden.com/password-generator/#password-generator)
 
 Assuming you already have a functional `~/.ssh/config` that looks something like
 ```ini
@@ -79,4 +79,4 @@ In order to prevent that, you can block access to certain sites in uBlock Origin
 ||github.com/stashapp^$document
 ```
 
-The aforementioned rule blocks visiting any site that starts with `github.com/stashapp/`. This would include `stashapp/stash` and `stashapp/CommunityScripts`. A similar rule can also be extended to other resources and sites. Being aware of what you are oding and under which identity you are working under is always important, nonetheless.
+The aforementioned rule blocks visiting any site that starts with `github.com/stashapp/`. This would include `stashapp/stash` and `stashapp/CommunityScripts`. A similar rule can also be extended to other resources and sites. Being aware of what you are doing and under which identity you are working under is always important, nonetheless.
