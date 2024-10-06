@@ -57,6 +57,24 @@ Changing `commit.gpgsign` to false will prevent the usage of `user.signingkey`.
 
 After making a commit, make sure to verify that your new identity is in use - this can be confirmed with `git log`.
 
+## git config - multiple repositories
+If you have repositories segregated by folder, you can set overrides per file [StackOverflow](https://stackoverflow.com/a/48088291)
+
+`~/.gitconfig (global)`
+```ini
+[includeIf "gitdir:~/stash-projects/"]
+	path = ~/stash-projects/gitconfig
+```
+
+`~/stash-projects/gitconfig`
+```ini
+[user]
+	name = Iodine Swizzle
+	email = iodine-swizzle@users.noreply.github.com
+[commit]
+	gpgsign = false
+```
+
 ## amending the last commit
 If you committed but didn't push using the right identity, assume the correct one and then continue with your fix
 
