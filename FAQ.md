@@ -19,6 +19,9 @@
 ## NPM (Nginx Proxy Manager)
 - Enable Websockets support in your site page
 
+## Synology DSM
+https://mlohr.com/websockets-for-synology-dsm/ is a good writeup for enabling websockets
+
 ## Other webservers:
 Check the [docs](https://docs.stashapp.cc/networking/reverse-proxy/) for the most up-to-date configurations
 
