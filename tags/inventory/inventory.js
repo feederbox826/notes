@@ -6,7 +6,7 @@ let allTags = []
 
 const showTable = (arr) => {
   document.getElementById("tagbody").innerHTML = ""
-  arr.forEach(tag => addToTable(...tag))
+  arr.forEach(tag => addToTable(tag))
 }
 
 const getElem = (name) => {
@@ -72,17 +72,33 @@ function addToTable(tag) {
   body.appendChild(row)
 }
 
-fetch(`${BASEURL}/tags-export.json`)
+const reload = () => {
+  fetch("https://feederbox.cc/trigger/tags/update/await")
+    .then(res => res.json())
+    .then(data => mapTags(data))
+}
+
+const mapTags = tags => {
+  allTags = []
+  vidTags = []
+  imgTags = []
+  bothTags = []
+  allTags = Object.entries(tags)
+    .map(([name, tags]) => ({ name, ...tags }))
+  allTags.forEach(tag => {
+    if (tag.img && tag.vid) bothTags.push(tag)
+    else if (tag.img) imgTags.push(tag)
+    else if (tag.vid) vidTags.push(tag)
+  })
+  showTable(allTags)
+}
+
+fetch(`${BASEURL}/tags-export.json`, {
+  cache: "no-store"
+})
   .then(res => res.json())
   .then(data => {
-    const allTags = Object.entries(data)
-      .map(([name, data]) => ({ name, ...data }))
-    allTags.forEach(tag => {
-      if (tag.img && tag.vid) bothTags.push(tag)
-      else if (tag.img) imgTags.push(tag)
-      else if (tag.vid) vidTags.push(tag)
-      addToTable(tag)
-    })
+    mapTags(data)
     document.getElementById("total").textContent = allTags.length
     document.getElementById("vid").textContent = vidTags.length
     document.getElementById("img").textContent = imgTags.length
