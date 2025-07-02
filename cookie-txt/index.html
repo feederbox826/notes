@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      @import url("style.css");
+    </style>
+  </head>
+  <body>
+    <h3>cookies.txt converter</h3>
+    <textarea id="txt"
+      placeholder="Drop cookies.txt here or choose a file"
+      ondrop="dropHandler(event)"
+      ondragover="dragOverHandler(event)"></textarea>
+    <button onclick="convertText()">Convert</button>
+    <label for="select-file">Choose File</label>
+    <input
+      type="file"
+      id="select-file"
+      accept=".txt"
+      onchange="chooseHandler(event)"
+    >
+    <br>
+    <textarea id="yml"></textarea>
+    <button onclick="copyToClipboard()">Copy to Clipboard</button>
+    <script src="convert.js"></script>
+  </body>
+</html>
