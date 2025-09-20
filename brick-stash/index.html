@@ -1,0 +1,46 @@
+<html>
+  <style>
+      @import url("../static/style.css");
+    </style>
+  <body>
+    <h3>stash bricker</h3>
+    <p>
+      Bricks remote instances of stash for their safety
+    </p>
+    <p>
+      Bricking an instance will set a username (visible in config) and a random password
+      (not visible in config) that will require the user to manually edit their config to log back in.
+    </p>
+    <label for="url">Stash URL:</label>
+    <input style="width: 100%" id="url" placeholder="http://localhost:9999">
+    <br>
+    <label for="username">Username to set:</label>
+    <input style="width: 100%" id="username" value="your-stash-is-publicly-exposed-please-add-auth-to-it">
+    <button onclick="brick()">Brick</button>
+  </body>
+  <script>
+    async function brick() {
+      const username = document.getElementById("username").value;
+      let url = document.getElementById("url").value;
+      // add protocol if missing
+      if (!url.startsWith("http://")) url = "http://" + url;
+      // remove trailing slash if present
+      if (url.endsWith("/")) url = url.slice(0, -1);
+      const req = await fetch(`${url}/graphql`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json" },
+        body: {
+          query: `mutation ($username: String, $password: String) {
+            configureGeneral(
+              input: { username: $username password: $password }
+            ) { username }}`,
+          variables: { username, password: crypto.randomUUID() },
+        }
+      })
+      if (req.status == 401) return alert("Error: Unauthorized (401). The instance is already protected by authentication.")
+      await req.json()
+        .then(data => { if (data.data?.configureGeneral?.username) alert("Bricked successfully") })
+        .catch((err) => alert("Error: " + err));
+    }
+  </script>
+</html>
