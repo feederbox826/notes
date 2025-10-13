@@ -35,6 +35,10 @@ We also have to override `STASH_CONFIG_FILE` to point outside of `/root/.stash` 
 
 Set `user` to whatever UID/GID combo you use for your apps and make sure the path of the volume you're mapping has access to it too (`chown`)
 
+## readonly
+If you have every path mapped and would like additional security assurances, you can prevent changes to filesystems with [read_only](https://docs.docker.com/reference/compose-file/services/#read_only)
+This will ensure nothing outside of mount paths will be written to stash. This notably includes adding and updating existing python dependencies.
+
 ## migration
 Migration is tricky but can be broken down into a few complicated steps
 - Adjust your `config.yml` to point to the new paths
