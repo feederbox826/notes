@@ -23,8 +23,14 @@ services:
       - SERVER_COUNTRIES=Netherlands
       - HTTPPROXY=on
       - HTTPPROXY_STALTH=on
+  cdp:
+    container_name: cdp
+    image: docker.io/chromedp/headless-shell:latest
+    network_mode: "service:gluetun"
 ```
 Shut down stash and add `proxy: http://gluetun:8888` to your stash's `config.yml`
+
+Add your cdp address as `http://gluetun:9222/json/version`
 
 ## Detailed Guide
 > [!TIP]
@@ -55,3 +61,4 @@ services:
 
 3. Shut down your stash instance and add `proxy: http://gluetun:8888` to your `config.yml` file. This is unfortunately [not supported in environment variables](https://docs.stashapp.cc/guides/advanced-configuration-options/)
 4. As an extra precaution, add `HTTP_PROXY="http://gluetun:8888"` to your environment variables so that any script that respects it also uses gluetun
+5. CDP does not take in proxy variables easily so it's easier just to pass it through to gluetun. Add `network_mode: "service:gluetun"`. This will forward all traffic in and out through gluetun, so you'll have to update your CDP address to reflect this. Instead of connecting to cdp, connect to gluetun at the same port 9222
