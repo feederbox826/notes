@@ -4,7 +4,7 @@ For this example we'll be scraping `JustWatch.com`. Screenshots have been croppe
 
 # 0. Jargon + tools
 ## Browser Developer Tools
-We'll be making heavy use of developer tools. There are alterantives but this is my preferred way of doing things. This is built into your browser
+We'll be making heavy use of developer tools. There are alternatives but this is my preferred way of doing things. This is built into your browser
 
 On Chrome/ FireFox, I prefer `F12`.
 
@@ -20,9 +20,9 @@ regex is commonly used in scrapers as a quick and easy clean. Sites like [regexr
 
 If you're not as experienced, you might want to lean on an LLM for developing patterns, but do test on those sites
 
-## Selector restource constructor
-- xpath cheatsheet - https://devhints.io/xpath
-- css selector cheatsheet https://devhints.io/css (personal preference for iteration)
+## Selector resources
+- xpath cheat sheet - https://devhints.io/xpath
+- css selector cheat sheet https://devhints.io/css (personal preference for iteration)
 - stash scraper development docs https://docs.stashapp.cc/in-app-manual/scraping/scraperdevelopment/
 
 ## API Tester
@@ -37,7 +37,7 @@ Some popular clients that also support graphql are:
 [curl](https://curl.se/download.html) is also recommended to test WAFs.
 
 ## VPN subscription
-While not strictly necessary, it is very very helpful to test geo-location blobks.
+While not strictly necessary, it is very very helpful to test geo-location blocks.
 
 If you're a backer, [there is a community proxy available](https://discourse.stashapp.cc/t/http-s-proxy-for-backers/4071). Otherwise see [tangent/vpn](./tangent/vpn.md) for my thoughts.
 
@@ -66,7 +66,7 @@ Before going too far, be aware of possible alternatives. This can include
 - Searching for public APIs. In this case there is [api.justwatch.com](https://apis.justwatch.com/docs/api/) which we will pretend doesn't exist.
 
 ## Private APIs/ fetch
-A lot of websites have private APIs that they call interally from the website. If these are exposed publicly, they can be utilized. To discover these, Open up [Developer Tools](#browser-developer-tools) -> Network -> `Fetch/XHR`. You can see an example of this on [stash CommunityScraper index](https://stashapp.github.io/CommunityScrapers/). We can see an XHR call to [`scrapers.json`](https://stashapp.github.io/CommunityScrapers/assets/scrapers.json
+A lot of websites have private APIs that they call internally from the website. If these are exposed publicly, they can be utilized. To discover these, Open up [Developer Tools](#browser-developer-tools) -> Network -> `Fetch/XHR`. You can see an example of this on [stash CommunityScraper index](https://stashapp.github.io/CommunityScrapers/). We can see an XHR call to [`scrapers.json`](https://stashapp.github.io/CommunityScrapers/assets/scrapers.json
 ) which contains all the goodies that one might want to access instead of scraping the WebUI.
 
 ## ld+json
@@ -77,7 +77,7 @@ the [ld-json](https://json-ld.org/) spec is amazing for scraping. It is covered 
 
 inspect the page in [Developer Tools](#browser-developer-tools). Head into Elements and open up the `<head>` dropdown. You'll see a plethora of `<meta>` elements.
 
-These are used for SEO and usually contain valuable scrapeable information in a digestable, accessible format (usually amazing for images).
+These are used for SEO and usually contain valuable scrape-able information in a digestible, accessible format (usually amazing for images).
 
 # 2.0 Scraper Planning
 We need to identify what elements we're going to scrape before trying to extract them. [stash docs](https://docs.stashapp.cc/in-app-manual/scraping/scraperdevelopment/#object-fields) is a great resource for all possible values. Identify all elements you want to scrape and see if the page provides them. In this case we'll scrape it as a `Scene`.
@@ -112,7 +112,7 @@ a tl;dr of the cycle is
 - Repeat until you only get one result
 
 ## Title
-We know the title, so we first open [Developer Tools](#browser-developer-tools), head to elements, hit `Ctrl + F` for a searchbar and type in the title: `project hail mary`
+We know the title, so we first open [Developer Tools](#browser-developer-tools), head to elements, hit `Ctrl + F` for a search bar and type in the title: `project hail mary`
 
 We see a couple of matches in `<meta>` but they're all appended with "streaming: where to watch online" or similar junk so we avoid those. We do see a ld-json block but will ignore that unless strictly necessary. Eventually we end up with the following text block within the `<h1>`
 
@@ -159,7 +159,7 @@ Nice. one result. Let's move on
 ```
 
 ## Details
-For details, we want to grab the synopsis. Let's quickly scan the page visually. Let's grab the first sentence and throw it into search agian.
+For details, we want to grab the synopsis. Let's quickly scan the page visually. Let's grab the first sentence and throw it into search again.
 
 ![](./img/scraper-03.webp)
 
@@ -185,11 +185,11 @@ We know we want to include `A science teacher` but not `Synopsis`. Let's try to 
 
 Construct a selector for `article-block`, xpath: `//article` and we get 3 blurbs. Adding on the class (`//article[@class="article-block"]`) would solve this but let's try stepping down from synopsis instead. 
 
-First create a selector for `synopsis`, xpath `//div[@id="synopsis"]` or css `div#synopsis`. One sresult. so let's continue
+First create a selector for `synopsis`, xpath `//div[@id="synopsis"]` or css `div#synopsis`. One result. so let's continue
 
 We want to descend within this to article block, so let's first start with a generic. `//div[@id="synopsis"]` + `//article`.
 
-𐠒: `//` is actually a selector that allow for mutliple levels, or anything before, so we usually want it at the beginning unless we want a really long preceding path. If you wanted to only include the tagline, we would create a selector to match everything in between. This would look like
+𐠒: `//` is actually a selector that allow for multiple levels, or anything before, so we usually want it at the beginning unless we want a really long preceding path. If you wanted to only include the tagline, we would create a selector to match everything in between. This would look like
 `//div[@id="synopsis"]/article/div/h3` since we need to step down into every single element. We can shorten this by replacing the `/article/div` path with `//`. This would create `//div[@id="synopsis"]//h3` which is less accurate but works for this case.
 
 We can combine these two selectors now for `//div[@id="synopsis"]/article` - we drop the second `/` from the prefix of article. Since we have multiple results, let's do some post processing to mimic the newlines on the page. In this case let's use the [`concat`](https://docs.stashapp.cc/in-app-manual/scraping/scraperdevelopment/#post-processing-options) post-processing option. Since we're adding post-processing, our selector has to be under `selector` instead of just `Details`. The `\n\n` will do the same as two enters and place it on the next line.
@@ -245,7 +245,7 @@ Above that is `<span data-v-c854ca9a="">`. Generic, lets head up another one.
 ```
 looks promising, we notice that one of the classes included is directors. Let's try that. But since it's one class in many, we need to use a more elaborate xpath. `//div[contains(@class,"directors")]` or css `div.directors`. One result, let's use that to ground our selector.
 
-`//div[contains(@class,"directors")]` + `//span[@class="title-credit-name"]`. In thise case we want to keep the `//` between them as there's an additional `<span>` in between. Our final selector returns two values, just what we want. Stash expects one value so let's use postprocess [`concat`](https://docs.stashapp.cc/in-app-manual/scraping/scraperdevelopment/#post-processing-options) to join them with a comma. Once again, underneath selector since we are doing postprocessing.
+`//div[contains(@class,"directors")]` + `//span[@class="title-credit-name"]`. In these cases we want to keep the `//` between them as there's an additional `<span>` in between. Our final selector returns two values, just what we want. Stash expects one value so let's use postprocess [`concat`](https://docs.stashapp.cc/in-app-manual/scraping/scraperdevelopment/#post-processing-options) to join them with a comma. Once again, underneath selector since we are doing postprocessing.
 
 ```yml
   Director:
@@ -254,17 +254,17 @@ looks promising, we notice that one of the classes included is directors. Let's 
 ```
 
 ## Image
-Image is one of the tricker ones, which you need to ensure your [javscript is disabled](#3-javascript). There are a lot of images on the page but it looks like the one we want is beside the directors. Instead of searching, right click the image and click "Inspect"
+Image is one of the tricker ones, which you need to ensure your [JavaScript is disabled](#3-javascript). There are a lot of images on the page but it looks like the one we want is beside the directors. Instead of searching, right click the image and click "Inspect"
 
 ![](./img/scraper-05.webp)
 
-We can see the image is encapsulated with a `<picture>` this usually means it can load from mutliple image types depending on browser to save on space. This makes things a bit more complicated. Let's see if there are any easier ways around that. Let's copy the domain out: from the url
+We can see the image is encapsulated with a `<picture>` this usually means it can load from multiple image types depending on browser to save on space. This makes things a bit more complicated. Let's see if there are any easier ways around that. Let's copy the domain out: from the url
 ```
 https://images.justwatch.com/poster/317091394/s166/project-hail-mary.jpg
 https://images.justwatch.com
 ```
 
-and see if there might be any other easier or consistent accessability points. Throw that back into search and we discover our first [meta](#meta-tags) result, which is actually even higher quality (718x1024 instad of 166x236)
+and see if there might be any other easier or consistent accessability points. Throw that back into search and we discover our first [meta](#meta-tags) result, which is actually even higher quality (718x1024 instead of 166x236)
 
 ![](./img/scraper-06.webp)
 
@@ -272,13 +272,13 @@ and see if there might be any other easier or consistent accessability points. T
 <meta data-vue-meta="ssr" data-vmid="og:image" property="og:image" content="https://images.justwatch.com/poster/317091394/s718/project-hail-mary.jpg">
 ```
 
-Just by looking at the surrounding properties we can see that `<meta data-vue-meta="ssr"...` is too common to use, but `og:image` seems to be unique enough, lets contruct a selector to test. This is called an attribute, so let's reference the [cheat sheet](https://devhints.io/xpath).
+Just by looking at the surrounding properties we can see that `<meta data-vue-meta="ssr"...` is too common to use, but `og:image` seems to be unique enough, lets construct a selector to test. This is called an attribute, so let's reference the [cheat sheet](https://devhints.io/xpath).
 
 ```
 input[type="submit"]	//input[@type="submit"]
 ```
 
-xpath: `//meta[@property="og:image"]` or css `meta[property="og:image"]`. Since this isn't a textbox, when we actuall put this in a scraper, we get nothing back. This is because we need to select the value of content="". Target the attribute name, `@content` by adding it on to the end of the scraper, after a `/`
+xpath: `//meta[@property="og:image"]` or css `meta[property="og:image"]`. Since this isn't a textbox, when we actually put this in a scraper, we get nothing back. This is because we need to select the value of content="". Target the attribute name, `@content` by adding it on to the end of the scraper, after a `/`
 
 ```yml
   Image: //meta[@property="og:image"]/@content
@@ -371,7 +371,7 @@ xpath: `//h3[contains(text(), "Genres")]`
 
 `contains()` is a function that checks if the value we specify is within the first. In this case, if "Genres" is within `text()`.
 
-This selector returns one result, but this is beside the `post-detail-infos__value` that we want. There are to ways to select this, by going to the shared aprent with `/..`, in this case then stepping down to `/div` `//h3[contains(text(), "Genres")]/../div` or by using a sibling selector. 
+This selector returns one result, but this is beside the `post-detail-infos__value` that we want. There are to ways to select this, by going to the shared parent with `/..`, in this case then stepping down to `/div` `//h3[contains(text(), "Genres")]/../div` or by using a sibling selector. 
 
 In this case we want the following sibling, `//h3[contains(text(), "Genres")]/following-sibling::div`. Both of these return one result which is exactly what we want
 
@@ -445,7 +445,7 @@ the `<a>` contains the link we're after
   data-v-7c67b8f9="">
 ```
 
-The URL (href) will differ, data-v seems to be internal or inconsistnet, let's have a poke at the other values.
+The URL (href) will differ, data-v seems to be internal or inconsistent, let's have a poke at the other values.
 
 #### target="_blank"
 xpath: `//a[@target="_blank"]` returns 7 results, all of which to streaming/ theater sites. Let's continue
@@ -552,7 +552,7 @@ Checklist
 - [ ] Details - where are our newlines?
 - [x] Cover
 
-# 3.1 Debugging & interating
+# 3.1 Debugging & iterating
 
 ## Title
 We want to remove the year. First let's try using `/text()` to see if it is just pulling too much. Otherwise we can move on to regex.
@@ -603,7 +603,7 @@ This can be accomplished with regex but instead of removing `(` and `)` let's ge
 
 We know from previous regex that we need to escape `(`. After adding `\)` the pattern seems to have failed. This is because regex is looking for both of these in a row. Throw in a pipe (`|`) to act as an OR and we're set with `\(|\)` ([state 2](regexr.com/8libf)).
 
-To ensure we only select the `(` at the start and the `)` at the end, we use the anchors - `^` for the beginning and `$` for the end. This makes `^\(|\)$`. If we populate this, it doesnt seem to work. That's because regex is only checking on one line. Add the flag `m` for multiline and you'll see it work it's magic ([state 3](regexr.com/8libi))
+To ensure we only select the `(` at the start and the `)` at the end, we use the anchors - `^` for the beginning and `$` for the end. This makes `^\(|\)$`. If we populate this, it doesn't seem to work. That's because regex is only checking on one line. Add the flag `m` for multiline and you'll see it work it's magic ([state 3](regexr.com/8libi))
 
 ```diff
   Date:
