@@ -1,0 +1,40 @@
+name: JustWatch
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - justwatch.com/us/movie/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1
+        postProcess:
+         - replace:
+           - regex:  \(\d{4}\)
+             with: ""
+      Details:
+        selector: //div[@id="synopsis"]/article
+        concat: "\n\n\n"
+      Director:
+        selector: //div[contains(@class,"directors")]//span[@class="title-credit-name"]
+        concat: ", "
+      URLs: //a[@class="offer"]/@href
+      Date:
+        selector: //span[@class="release-year"]
+        postProcess:
+         - replace:
+           - regex: ^\(|\)$
+             with: ""
+        # no postProcess since we have a year only
+        #postProcess:
+        #  - parseDate: January 2, 2006
+      Image: //meta[@property="og:image"]/@content
+      Tags:
+        Name:
+          selector: //h3[contains(text(), "Genres")]/../div/div/span[1]
+          split: ", "
+      Performers:
+        Name: //div[@class="title-credits__actor"]//span[@class="title-credit-name"]
+debug:
+  printHTML: true

@@ -623,3 +623,6 @@ We added `\n` for newline but where did they go? Stash strips newlines as an aut
 -       concat: \n\n\n
 +       concat: "\n\n\n"
 ```
+
+# 3.2 - Result
+You can view the finished scraper with all fixes applied at [JustWatch.yml](./JustWatch.yml)
