@@ -1,4 +1,4 @@
-const getRemoteUA = () => fetch("https://jnrbsn.github.io/user-agents/user-agents.json")
+const getRemoteUA = () => fetch("https://feederbox826.github.io/user-agents/user-agents.json")
     .then(res => res.json())
 
 async function setUA() {
