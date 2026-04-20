@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      @import url("static/style.css");
+      body { font-size: 20px; }
+      .fprint-hamming-match { background-color: #0f9960; }
+      .fprint-hamming-warn { background-color: #d9822b; }
+      .fprint-hamming-danger { background-color: #db3737; }
+    </style>
+  </head>
+  <body>
+    <h3>hamming distance</h3>
+    <div class="container">
+      <input id="reference" placeholder="aaaaaaaaaaaaaaaa">
+    </div>
+    <div class="container">
+      <input id="comparison" placeholder="bbbbbbbbbbbbbbbb">
+    </div>
+    <div class="container">
+      <p id="hamming-distance">Hamming Distance: ?</p>
+    </div>
+    <script src="https://feederbox.cc/uscript/requires/hamming.js"></script>
+    <script>
+      const referenceInput = document.getElementById("reference");
+      const comparisonInput = document.getElementById("comparison");
+      const updateHamming = () => {
+        const distance = getHamming(referenceInput.value.trim(), comparisonInput.value.trim());
+        const distanceElem = document.getElementById("hamming-distance");
+        distanceElem.textContent = `Hamming Distance: ${distance}`;
+        distanceElem.className = hammingThresholds(distance);
+      }
+      // box-fprint.user.js
+      const hammingThresholds = (distance) => {
+        if (distance <= 4) return " fprint-hamming-match"
+        else if (distance <= 8) return " fprint-hamming-warn"
+        else return " fprint-hamming-danger"
+      }
+      referenceInput.addEventListener("input", updateHamming);
+      comparisonInput.addEventListener("input", updateHamming);
+    </script>
+  </body>
+</html>
