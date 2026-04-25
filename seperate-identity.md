@@ -75,6 +75,22 @@ If you have repositories segregated by folder, you can set overrides per file [S
 	gpgsign = false
 ```
 
+## git config - gpg signing
+[learn more about GPG keys](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key)
+
+**Password Protected** GPG keys is a rock-solid front-line defense against accidental commits.
+For this, you need to ensure that both your personal and alternative accounts have different password-protected GPG keys.
+
+This requires amending the commit to re-introduce GPG
+```ini
+[user]
+	signingkey = 4F0CA2E5E16BB86322FD59FEC0C101A7F5628399
+[commit]
+	gpgsign = true
+```
+
+If you type in the password for primary identity into the anonymous identity and vice versa, you'll be met with an error which is usually enough to stop most slip-ups.
+
 ## amending the last commit
 If you committed but didn't push using the right identity, assume the correct one and then continue with your fix
 
